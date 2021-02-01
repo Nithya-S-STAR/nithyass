@@ -7,8 +7,10 @@ int sum( int a , int b)
 int main()
 {
   int a,b,total;
-  printf("Enter the two numbers");
-  scanf("%d%d", &a , &b);
+  printf("Enter the  number:");
+  scanf("%d", &a);
+  printf("Enter the number :");
+  scanf("%d",&b);
   total = sum(a,b);
   printf("sum of %d and %d is %d" , a,b,total);
 }
