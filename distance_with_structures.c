@@ -19,7 +19,7 @@ Point input()
 float distance(Point p1 , Point p2)
 {
      float dis;
-     dis = sqrt(pow((p1.x-p2.x),2)+pow((p1.y -p2.y),2))
+     dis = sqrt(pow((p1.x-p2.x),2)+pow((p1.y -p2.y),2));
      return dis;
 }
 void output(Point p1, Point p2 , float dis)
