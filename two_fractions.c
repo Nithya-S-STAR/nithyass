@@ -2,35 +2,51 @@
 #include<stdio.h>
 struct fraction
 {
-     float n , d;
+     int n , d;
 };
 typedef struct fraction fract;
 fract input()
 {
     fract f;
     printf("Enter the numerator:\n");
-    scanf("%f",&f.n);
+    scanf("%d",&f.n);
     printf("Enter the denominator:\n");
-    scanf("%f",&f.d);
+    scanf("%d",&f.d);
     return f;
 }
-float compute_add(fract f1 , fract f2)
+int gcd(int a , int b)
 {
-    float sum;
-    sum =(((f1.n*f2.d)+(f2.n*f1.d))/(f1.d*f2.d));
-    return sum;
-}
-void display(fract f1 , fract f2 , float sum)
+     while(a!=b)
+     {
+          if(a>b)
+               a=a-b;
+          else
+               b=b-a;
+     }
+     return a;
+}   
+     
+fract compute_add(fract f1 , fract f2)
 {
-    printf("The addition of %f/%f and %f/%f is %f",f1.n,f1.d,f2.n,f2.d,sum);
+    fract f3;
+    f3.d = gcd(f1.d,f2.d);
+    f3.d = (f1.d*f2.d)/f3.d;
+    f3.n = (f1.n)*(f3.d/f1.d)+(f2.n)*(f3.d/f2.d);
+    int common_factor = gcd(f3.n,f3.d);
+    f3.d = f3.d/common_factor;
+    f3.n = f3.n/common_factor;
+    return f3;
+}   
+void display(fract f1 , fract f2 , fract f3)
+{
+    printf("The addition of %d/%d and %d/%d is %d/%d\n",f1.n,f1.d,f2.n,f2.d,f3.n,f3.d);
 }
 int main()
 {
-    fract f1,f2;
-    float sum;
+    fract f1,f2,f3;
     f1 = input();
     f2 = input();
-    sum = compute_add(f1,f2);
-    display(f1,f2,sum);
+    f3 = compute_add(f1,f2);
+    display(f1,f2,f3);
     return 0;
 }
