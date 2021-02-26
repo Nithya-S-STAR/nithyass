@@ -15,15 +15,10 @@ fract input()
     return f;
 }
 int gcd(int a , int b)
-{
-     while(a!=b)
-     {
-          if(a>b)
-               a=a-b;
-          else
-               b=b-a;
-     }
-     return a;
+{ 
+     if (a == 0)
+        return b;
+    return gcd(b%a, a);
 }   
      
 fract compute_add(fract f1 , fract f2)
