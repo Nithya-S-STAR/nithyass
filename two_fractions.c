@@ -24,9 +24,8 @@ int gcd(int a , int b)
 fract compute_add(fract f1 , fract f2)
 {
     fract f3;
-    f3.d = gcd(f1.d,f2.d);
-    f3.d = (f1.d*f2.d)/f3.d;
-    f3.n = (f1.n)*(f3.d/f1.d)+(f2.n)*(f3.d/f2.d);
+    f3.d = f1.d* f2.d;
+    f3.n = (f1.n)*(f2.d)+(f2.n)*(f1.d);
     int common_factor = gcd(f3.n,f3.d);
     f3.d = f3.d/common_factor;
     f3.n = f3.n/common_factor;
