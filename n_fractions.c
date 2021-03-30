@@ -1,73 +1,69 @@
 //WAP to find the sum of n fractions.
-#include<stdio.h>
+#include <stdio.h>
 struct fraction
 {
-    int n ;
-    int d ;
+    int n;
+    int d;
 };
 typedef struct fraction fract;
-void input( int max , fract a[max])
+int input_size()
 {
- 
-    printf(“Enter all the numerators and denominators  :\n”);
-    for(int i=0;i<=max;i++)
+    int max ;
+    printf("Enter the maximum number of fractions:\n");
+    scanf("%d",&max);
+    return max;
+}
+void input(int max , fract a[max])
+{
+    printf("Enter the numerator and denominator fraction respectively:\n");
+    for(int i = 0;i<max;i++)
     {
-       scanf(“%d ,%d”,&a[i].n ,&a[i].d);
-
+        scanf("%d%d",&a[i].n , &a[i].d);
     }
 }
-int gcd ( int a , int b)
+int gcd(int a , int b)
+{ 
+     if (b == 0)
+        return a;
+    return gcd(b, a%b);
+}   
+fract compute_2fractions(fract f1 , fract f2)
 {
-   if(a==0)
-     return b;
-   return(b%a , a);
- }
-int findlcm(fract a[max] , int max)
+    fract f3;
+    f3.d = f1.d* f2.d;
+    f3.n = (f1.n)*(f2.d)+(f2.n)*(f1.d);
+    int common_factor = gcd(f3.n,f3.d);
+    f3.d = f3.d/common_factor;
+    f3.n = f3.n/common_factor;
+    return f3;
+}
+fract compute_nfractions(int max , fract a[max])
 {
-   for(int i =1;i<max;i++)
-   {
-      k = 0;
-      for(j=1;j<=max;j++)
-      {
-         if(i% a[j].d ==0)
-         {
-            k++;
-         }
-      if(k==max)
-     {
-        return i;
-   }
+    fract sum;
+    sum.n = 0;
+    sum.d = 1;
+    for(int  i=0; i<max;i++)
+    {
+        sum = compute_2fractions(sum , a[i]);
+    }
+    return sum;
 }
-}
-fract compute(fract a[max] , int max)
+void display(int max , fract a[max] , fract sum)
 {
-    fract result;
-   fract result.n = 0;
-   fract result.d = findlcm(a,max);
-   for(int i = 0; i<max;i++)
-   {
-      result.n = result.n + (a[i].n)*(result.d/a[i].d);
-   }
-int common_factor = gcd(result.n,result.d);
-result.n = result.n/common_factor;
-result.d = result.d/common_factor;
-return result;
-}
-void display(fract a[max] , int max , result)
-{
-   for(int i =0;i<max;i++)
-   {
-      printf(“Sum of fractions is %d/%d\n”,result.n/result.d);
-}
+    printf("the fractions to be summed up are\n");
+    for(int i = 0;i<max;i++)
+    {
+        printf("%d/%d\n",a[i].n,a[i].d);
+    }
+    printf("The sum is : %d/%d ",sum.n,sum.d);
 }
 int main()
 {
-   int max ;
-   printf(“Enter the maximum number of fractions”);
-   scanf(“%d\n”, &max);
-   fract a[max] , sum=0;
-   input(max,a[max]);
-   sum = compute(a , max);
-   display(a,max,sum);
-return 0;
+    int max;
+    max = input_size();
+    fract a[max] , sum;
+    input(max,a);
+    sum = compute_nfractions(max,a);
+    display(max,a,sum);
+    return 0;
 }
