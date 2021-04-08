@@ -1,152 +1,143 @@
 //Write a c program using structure and arrays to generate grade book
 
 #include<stdio.h>
-struct grades
+
+typedef struct
 {
-    char name[50];
-     int n ;
-     char course[50];
-     int m;
-     int k;
-     int w[k];
-     int score[k];
-    };
-typedef struct grades grade;
-grade input_one_student()
+	char student_name[10];
+	int scores[10];
+      char grade;
+      float avg_score;
+}student;
+
+typedef struct
 {
-    grade a;
-    printf(“Enter the number of gradebooks to be processed:\n”);
-    scanf(“%d”,& a.n);
-    for(int i = 0 ; i < a.n ; i++)
-    {
-       printf(“Enter the %d course :\n “ , a.n);
-       scanf(“%c\n” , &a.course[i]);
-      printf(“Enter the number of students in course and number of scores recorded respectively :\n”);
-       scanf(“%d\t%d\n”,&a.m, &a.k);
-       printf(“Enter the weights of scores recorded:\n);
-       for(int j= 0 ; j< a.k ; j++)
-       {
-           scanf(“%d”,&a.w[j]);
-           printf(“\t”);
-      }
-      printf(“\n”);
-      for(int h = 0 ; h<1; h++)
-      {
-   
-           scanf(“%d” ,&a.name[h]);
-           printf(“\t”);
-           for(int g=0 ; g< a.k ; g++)
-           {
-               scanf(“%d\t”,&a.score[i]);
-           }
-          printf(“\n”);
-     }
-    printf(“/n”);
-  }
-return a;
-}
-grade input_n_student()
+	char course_names[10];
+	int no_students;
+      float weights[10];
+      int no_weights;
+      student std[10];
+}gradebook;
+
+int input_n()
 {
-   grade s;
-    printf(“Enter the number of gradebooks to be processed:\n”);
-    scanf(“%d”,& s.n);
-    for(int i = 0 ; i < s.n ; i++)
-    {
-       printf(“Enter the %d course :\n “ , s.n);
-       scanf(“%c\n” , &s.course[i]);
-      printf(“Enter the number of students in course and number of scores recorded respectively :\n”);
-       scanf(“%d\t%d\n”,&s.m, &s.k);
-       printf(“Enter the weights of scores recorded:\n);
-       for(int j= 0 ; j< s.k ; j++)
-       {
-           scanf(“%d”,&s.w[j]);
-           printf(“\t”);
-      }
-      printf(“\n”);
-      for(int h = 0 ; h<s.m; h++)
-      {
-   
-           scanf(“%d” ,&s.name[h]);
-           printf(“\t”);
-           for(int g=0 ; g< s.k ; g++)
-           {
-               scanf(“%d\t”,&s.score[i]);
-           }
-          printf(“\n”);
-     }
-    printf(“/n”);
-  }
-return s;
-}
-grade compute_grade_one_student( grade *a)
-{
-    grade w_avg = 0 , W=0;
-    for(int i =0; i<a.k; i++)
-    {
-        W = W + a.w[i];
-         w_avg = w_avg + a.score[i]*a.w[i];
-     }
-     grade normalised = w_avg/W;
-      if(0<=w_avg <60)
-      print(“F”);
-      else if(60<=w_avg<70)
-      print(“D”);
-      else if(70<=w_avg<80)
-      print(“c”);
-      else if(80<=w_avg<90)
-      print(“B”);
-      else
-       print(“A”);
-}
-grade compute_grade_n_student(grade *s)
-{
-   grade w_avg = 0 , W=0;
-    for(int i =0; i<a.k; i++)
-    {
-        W = W + a.w[i];
-         w_avg = w_avg + a.score[i]*a.w[i];
-     }
-     grade normalised = w_avg/W;
-      if(0<=w_avg <60)
-      print(“F”);
-      else if(60<=w_avg<70)
-      print(“D”);
-      else if(70<=w_avg<80)
-      print(“c”);
-      else if(80<=w_avg<90)
-      print(“B”);
-      else
-       print(“A”);
+    int n;
+	printf("Enter the number of cases:");
+	scanf("%d",&n);
+	return n;
 }
 
-void output_one(grade*a,grade *compute_grade_one_student)
+student input_student(int no_weights)
 {
-   for(i=0;i<=n;i++)
-   {
-       printf(“%ch”,a.course[i]);
-       for(j=0;j<=m;j++)
-       {
-           printf(“%ch”,a.name[i]);
-           printf(“%f”,w_avg);
-        }
+	student s;
+	printf("\nEnter the student name: ");
+	scanf("%s", &s.student_name);
+	printf("Enter the scores of the student: ");
+	for(int i=0;i<no_weights;i++)
+	{
+		scanf("%d",&s.scores[i]);
+	}
+	return s;
+}
+
+gradebook input_gradebook()
+{
+	gradebook gb;
+	printf("\nEnter the course name: ");
+	scanf("%s", &gb.course_names);
+	printf("Enter no of students and no of weights: ");
+	scanf("%d%d", &gb.no_students, &gb.no_weights);
+	printf("Enter value of weights: ");
+	for(int i=0;i<gb.no_weights;i++)
+	{
+		scanf("%f",&gb.weights[i]);
+	}
+	for(int i=0;i<gb.no_students;i++)
+	{
+		gb.std[i] = input_student(gb.no_weights);
+	}
+	return gb;
+}
+
+void input_n_gradebook(int n, gradebook gb[n])
+{
+	for(int i=0;i<n;i++)
+	{
+		gb[i] = input_gradebook();
+	}
+}
+
+char compute_grade(float marks)
+{
+	char grade;
+	if(marks>=0 && marks<60)
+		grade = 'F';
+	else if(marks>=60 && marks<70)
+		grade = 'D';
+	else if(marks>=70 && marks<80)
+		grade = 'C';
+      else if(marks>=80 && marks<90)
+		grade = 'B';
+      else if(marks>=90 && marks<=100)
+		grade = 'A';
+	return grade;
+}
+
+void compute_students(student *std, gradebook gb)
+{
+	float total_weights,total_score;
+	for(int i=0;i<gb.no_weights;i++)
+	{
+		total_weights += gb.weights[i];
+	}
+	for(int i=0;i<gb.no_weights;i++)
+	{
+		total_score += std->scores[i]*gb.weights[i];
+	}
+	std->avg_score = total_score/total_weights;
+	std->grade = compute_grade(std->avg_score);
+}
+
+void compute_gradebook(gradebook *gb)
+{
+    for(int i=0;i<gb->no_students;i++)
+    {
+        compute_students(&gb->std[i],*gb);
     }
 }
-void output_one(grade*s,grade *compute_grade_n_student)
+
+void compute_n_gradebook(int n, gradebook gb[n])
 {
-   for(i=0;i<=n;i++)
-   {
-       printf(“%ch”,a.course[i]);
-       for(j=0;j<=m;j++)
-       {
-           printf(“%ch”,a.name[i]);
-           printf(“%f”,w_avg);
-        }
-    }
+	for(int i=0;i<n;i++)
+	{
+		compute_gradebook(&gb[i]);
+	}
 }
+
+void output_gradebook(gradebook gb)
+{
+	for(int i=0;i<gb.no_students;i++)
+	{
+		printf("\n%s \t %.2f %c",gb.std[i].student_name,gb.std[i].avg_score,gb.std[i].grade);
+	}
+}
+
+void output_n_gradebook(int n, gradebook gb[n])
+{
+	for(int i=0;i<n;i++)
+	{
+	    printf("\n%s",gb[i].course_names);
+		output_gradebook(gb[i]);
+	}
+}
+
 int main()
 {
-  compute_grade_one_student();
-   compute_grade_n_student();
-   output();
-return 0;
+	int n;
+	n = input_n();
+	gradebook gb[n];
+	input_n_gradebook(n,gb);
+	compute_n_gradebook(n,gb);
+	output_n_gradebook(n,gb);
+	return 0;
 }
