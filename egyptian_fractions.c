@@ -9,7 +9,7 @@ typedef struct fraction fract;
 int max_no_of_instances()
 {
     int max;
-    printf(“\nEnter the number of instances:\n”);
+    printf("\nEnter the number of instances:\n");
     scanf("%d",&max);
    return max;
 }
@@ -22,12 +22,13 @@ int input_size()
 }
 void input(int n , fract f[n])
 {
-printf(“Enter the denominator respectively:\n”);
+printf("Enter the denominator respectively:\n");
 for(int i = 0 ; i<n;i++)
 {
    f[i].n = 1;
-   scanf(“%d”,&f[i].d);
+   scanf("%d",&f[i].d);
 }
+return ;
 }
 int gcd(int a , int b)
 {
@@ -39,16 +40,16 @@ void display(int n , fract f[n] , fract sum)
 {
   for(int  i=0; i<n; i++)
   {
-     printf(“%d/%d + “ , f[i].n,f[i].d);
+     printf("%d/%d + " , f[i].n,f[i].d);
 }
-printf(“%d/%d”,sum.n,sum.d);
+printf("0 = %d/%d",sum.n,sum.d);
 return ;
 }
 fract compute_2fractions(fract f1 , fract f2)
 {
    fract f3;
    f3.d = f1.d * f2.d;
-   f3.n = (f1.n)*(f2.d)+(f2.n)(f1.d);
+   f3.n = (f1.n)*(f2.d)+(f2.n)*(f1.d);
    int common_factor =  gcd(f3.n , f3.d);
    f3.d = f3.d/common_factor;
    f3.n = f3.n/common_factor;
@@ -62,7 +63,7 @@ fract compute_nfractions(int n , fract f[n])
   for(int i =0;i<n;i++)
   {
      sum = compute_2fractions(sum,f[i]);
-}
+   }
 display(n,f,sum);
 }
 void generate_egyptian(int max)
@@ -73,12 +74,9 @@ void generate_egyptian(int max)
    {
       n = input_size();
       input(n,f);
-      for(int j = 0;  j<n; j++)
-      {
-         compute_nfractions(n,f);
-      }
-   return;
+      compute_nfractions(n,f);
     }
+    return ;
 }
 int main()
 {
