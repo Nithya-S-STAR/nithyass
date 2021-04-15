@@ -1,111 +1,123 @@
 //WAP to generate payroll
 #include<stdio.h>
 #include<string.h>
-struct time_cards
+typedef struct
 {
-    int min_worked;
-    char name[100];
-};
-typedef struct time_cards time_card;
-struct employee_record
+	char tc_name[10];
+	int tot_minutes;
+}timecards;
+
+typedef struct 
 {
-    char emp_name[100];
-     float hr_wage;
-     int n_time_cards;
-     float hrs_worked;
-     float min_worked;
-     float total_time;
-     float gross_pay;
-     time_card t[10];
-};
-typedef struct employee_record emp;
-int input()
+	char names[10];
+	float hr_wage;
+	float hrs_worked;
+	float min_worked;
+	float total_time;
+	float gross_pay;
+}payroll;
+
+int input_n_value()
 {
-    int n;
-    printf(“Enter the number of employees:\n”);
-     scanf(“%d”,n);
-     if(n>20)
-          printf(“Invalid input\n”);
-      else
-          return n;
+	int n;
+	printf("Enter the number of employees(<=20): ");
+	scanf("%d",&n);
+	if(n<=20)
+		return n;
+	else
+		printf("Wrong input");
+	return 0;	
 }
-emp input_one()
+int input_m_value()
 {
-    emp a;
-    printf(“Enter employee’s name and hourly wage:\n”);
-     scanf(“%100s%f”,&a.emp_name,&a.hr_wage);
-     return a;
+	int m;
+	printf("Enter the number of timecards: ");
+	scanf("%d",&m);
+	return m;
 }
-emp input_n(int n , emp a[n])
+payroll input_employee()
 {
-   for(int i = 0;i<n;i++)
-   {
-      a[i] = input_one();
+	payroll p;
+	printf("Enter employee's name and hourly wage: ");
+   	scanf("%s %f",p.names,&p.hr_wage);
+   	return p;
+}
+
+void input_n_employee(int n,payroll p[n])
+{
+    for(int i=0;i<n;i++)
+    {
+        p[i] = input_employee();
     }
 }
 
-time_card input_one_timecard()
-{
-    time_card t;
-    printf(“Enter name of employee and minutes worked:\n”);
-    scanf(“%100s%d”,&t.name , &t.min_worked);
+timecards input_timecards()
+{	
+    timecards t;
+    printf("Enter the employee's name and corresponding minutes worked: ");
+    scanf("%s %d",t.tc_name,&t.tot_minutes);
     return t;
 }
-time_card input_n_timecard(int n , emp a[n])
+
+void input_m_timecards(int m,timecards t[m])
 {
-  printf(“Enter the number of time cards:\n”);
-  scanf(“%d”,&emp->n_time_cards);
-  for(int i=0; i<emp->n_time_cards;i++)
-  {
-      a->t[i] = input_one_timecard();
-  }
-}
-void compute_one_timecard(time_card *t , employee *emp)
-{
-   if(strcmp(emp->emp_name,t->name)==0)
-   {
-      emp->hrs_worked = t->min_worked/60;
-      emp->min_worked = t->min_worked%60;
-      emp->total_time = emp->hrs_worked+(emp->min_worked/100);
-      if(emp->total_time>40)
-            emp->gross_pay = 1.5*emp->hr_wage*emp->total_time;
-      else
-            emp->gross_pay = 1*emp->hr_wage*emp->total_time;
-  }
-}
-void compute_one_employee(employee *emp)
-{
-    for(int i  = 0 ; i<emp->n_time_cards;i++)
+    for(int i=0; i<m; i++)
     {
-        compute_one_timecard(&emp->t[i],emp);
+    	t[i] = input_timecards();
     }
 }
-void compute_n_employee(int n , employee emp[n])
+payroll compute(int m,timecards t[m], payroll p)
 {
-   for(int i = 0;i<n;i++)
+    
+    p.min_worked=0;
+    for(int i=0;i<m;i++)
     {
-        compute_one_employee(&e[i]);
+        if(strcmp(p.names,t[i].tc_name)==0)
+        {
+            p.min_worked+=t[i].tot_minutes;
+        }
     }
- }
-void output_one_employee(employee emp)
-{
-   printf(“\n%s:%.2f , $%.2f”, emp.emp_name , emp.hrs_worked,emp.gross_pay);
+    p.hrs_worked=p.min_worked/60;
+    if(p.hrs_worked<=40)
+        {p.gross_pay=p.hrs_worked*p.hr_wage;}
+    else
+        {p.gross_pay=40*p.hr_wage+(p.hrs_worked-40)*1.5*p.hr_wage;}
+    return p;
+   
+   
 }
-void output_n_employee(int n , employee emp[n])
+void compute_n_values(int n, int m, timecards t[m],payroll p[n])
 {
-    for(int =0; i<n; i++)
+    
+    for(int i=0; i<n; i++)
     {
-        output_one_employee(emp[i]);
-     }
+    	p[i]=compute(m,t,p[i]);
+    }
+}
+
+void output(payroll *p)
+{
+    printf("\n%s: %.2f hours,$%.2f",p->names,p->hrs_worked,p->gross_pay);
+}
+void output_n_employee(int n,payroll p[n])
+{
+    for(int i=0;i<n;i++)
+    {
+        output(&p[i]);
+    }
 }
 int main()
 {
-    int n;
-    n = input();
-    employee emp[n];
-    input_n_employee(n,emp);
-    input_n_time_card(n, emp);
-    compute_n_employee(n,emp);
-    output_n_employee(n,emp);
-     return 0;
+	int n;
+	n = input_n_value();
+	payroll p[n];
+	input_n_employee(n,p);
+	int m;
+	m=input_m_value(); 
+	timecards t[m];
+	input_m_timecards(m,t);
+    compute_n_values(n,m,t,p);
+	
+	output_n_employee(n,p);
+	return 0;
 }
